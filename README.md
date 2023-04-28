@@ -1,7 +1,8 @@
 # IA626_FinalProject_Energyanalysis
 
 
-**#Initally loading the file into memory and printing first 5 rows**
+1.Initally loading the file into memory and printing first 5 rows
+
 import csv
 fn ='Heating_Gas_Consumption.csv'
 f = open(fn,'r')
