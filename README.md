@@ -119,8 +119,11 @@ Analysis based on main data Attributes like:
                 bro.drop(columns=['ELEVATION', 'PRCP_ATTRIBUTES', 'SNOW_ATTRIBUTES','SNWD', 'SNWD_ATTRIBUTES', 'TOBS' , 'TOBS_ATTRIBUTES', 'WT01', 'WT01_ATTRIBUTES', 'WT04', 'WT04_ATTRIBUTES', 'WT06',  'WT06_ATTRIBUTES'], inplace=True)
 
                 bro
-                
- ![
+  
+  ### plotting average current_charges consumption_therms of bronx borough through each day in a month 
+ 
+ <img width="800" alt="Bronx_1" src="https://user-images.githubusercontent.com/126725860/235343044-2a336853-949b-411a-8a37-d7c2af73a265.png">
+
 
     
 
