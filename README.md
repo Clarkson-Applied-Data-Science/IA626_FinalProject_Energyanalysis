@@ -9,6 +9,7 @@ This is a repo which describes about dataset which contains information about En
 Extracted heating usage data set for 10years(2013-2023) from https://opendata.cityofnewyork.us/data/ which contains details about energy usage data based on 4 boroughs(Queens, Brooklyn, Bronx, Manhattan) in NYC.
 
 These attributes provide a wide range as a user to introspect throughly and make decision on the data.
+### Data Description
 Analysis based on main data Attributes like:
 
 1. Borough
@@ -100,8 +101,13 @@ Analysis based on main data Attributes like:
         # Import dataset2
         bro = pd.read_csv('Bronx_new.csv')
         
+  <img width="1152" alt="Initial load data" src="https://user-images.githubusercontent.com/123268832/235383729-2d7def19-f685-46ba-a4fb-045eeff59147.png">
+
+        
 ### Drop unnecessary columns and rename any columns that need to be changed
         df1.drop(columns=['Meter AMR', 'Meter Scope', 'TDS #','EDP', 'RC Code'], inplace=True)
+<img width="1244" alt="Dropped Columns" src="https://user-images.githubusercontent.com/123268832/235383870-9e35355f-64f9-4b13-b57a-65a850f93929.png">
+
 
 ### Changing data type to datetime(ns) for revenue month 
         df1['Revenue Month']=pd.to_datetime(df1['Revenue Month'])
@@ -111,18 +117,241 @@ Analysis based on main data Attributes like:
         df1['Service End Date']=pd.to_datetime(df1['Service End Date'])
          
         bro['DATE']=pd.to_datetime(bro['DATE'])
+### Loading brooklyn data into df3 and cleaning the data as there are double quotes all over the dataset
+        DF3 = pd.read_csv('Brooklyn.csv',low_memory=False)
+        DF3 = DF3.replace('"', '', regex=True)
+        DF3.columns = DF3.columns.str.strip()
+        DF3
+        
+### Renaming and cleaning few columns to match the key values in all the data sets
+         Brooklyn = Brooklyn.rename(columns={'Development Name': 'Development_Name', 'Borough': 'Borough', 'Account Name': 'Account_Name',
+        'Location': 'Location', 'Funding Source': 'Funding_Source', 'AMP #': 'AMP_Number', 'Vendor Name': 'Vendor_Name', 'UMIS BILL ID': 'UMIS_BILL_ID',
+        'Revenue Month': 'Revenue_Month' , 'Service Start Date': 'Service_Start_Date', 'DATE': 'DATE', '# days':'Number_of_days', 'Meter Number': 'Meter_Number', 'Estimated': 'Estimated', 
+        'Current Charges': 'Current_Charges', 'Rate Class': 'Rate_Class', 'Bill Analyzed': 'Bill_Analyzed', 'Consumption (Therms)': 'Consumption_Therms', 'ES Commodity': 'ES_Commodity',
+        'Underlying Utility': 'Underlying_Utility', 'STATION': 'STATION', 'NAME': 'NAME', 'LATITUDE': 'LATITUDE', 'LONGITUDE': 'LONGITUDE', 'ELEVATION': 'ELEVATION', 'PRCP': 'PRCP', 'PRCP_ATTRIBUTES':'PRCP_ATTRIBUTES','SNOW': 'SNOW',
+        'TMAX': 'TMAX', 'TMAX_ATTRIBUTES': 'TMAX_ATTRIBUTES', 'TMIN': 'TMIN', 'TMIN_ATTRIBUTES': 'TMIN_ATTRIBUTES'
+       })
+
+       Brooklyn
+   <img width="1286" alt="Screenshot 2023-04-30 at 9 54 35 PM" src="https://user-images.githubusercontent.com/123268832/235389821-ff702786-a085-42c3-8d6c-18a254019ec3.png">
+
+    
+
+ ### Dropping unwanted coloumns to avoid extra data coloumns while merging the data 
+        DF4 = DF3.drop(['AWND', 'AWND_ATTRIBUTES', 'DAPR', 'DAPR_ATTRIBUTES', 'MDPR', 'MDPR_ATTRIBUTES',
+                          'PGTM', 'PGTM_ATTRIBUTES', 'PSUN', 'PSUN_ATTRIBUTES', 'SNOW_ATTRIBUTES', 'SNWD',
+                          'SNWD_ATTRIBUTES', 'TAVG', 'TAVG_ATTRIBUTES', 'TOBS', 'TOBS_ATTRIBUTES', 'TSUN',
+                          'TSUN_ATTRIBUTES', 'WDF2', 'WDF2_ATTRIBUTES', 'WDF5', 'WDF5_ATTRIBUTES', 'WESD',
+                          'WESD_ATTRIBUTES', 'WESF', 'WESF_ATTRIBUTES', 'WSF2', 'WSF2_ATTRIBUTES', 'WSF5',
+                          'WSF5_ATTRIBUTES', 'WT01', 'WT01_ATTRIBUTES', 'WT02', 'WT02_ATTRIBUTES', 'WT03',
+                          'WT03_ATTRIBUTES', 'WT04', 'WT04_ATTRIBUTES', 'WT05', 'WT05_ATTRIBUTES', 'WT06',
+                          'WT06_ATTRIBUTES', 'WT08', 'WT08_ATTRIBUTES', 'WT09', 'WT09_ATTRIBUTES', 'WT11',
+                          'WT11_ATTRIBUTES', 'WT13', 'WT13_ATTRIBUTES', 'WT14', 'WT14_ATTRIBUTES', 'WT15',
+                          'WT15_ATTRIBUTES', 'WT16', 'WT16_ATTRIBUTES', 'WT18', 'WT18_ATTRIBUTES', 'WT19',
+                          'WT19_ATTRIBUTES', 'WT22', 'WT22_ATTRIBUTES'], axis=1)
+                          
+         new_que = que.drop(['AWND', 'AWND_ATTRIBUTES', 'DAPR', 'DAPR_ATTRIBUTES', 'MDPR', 'MDPR_ATTRIBUTES',
+                  'PGTM', 'PGTM_ATTRIBUTES', 'SNOW_ATTRIBUTES', 'SNWD',
+                  'SNWD_ATTRIBUTES', 'TAVG', 'TAVG_ATTRIBUTES', 'WDF2', 'WDF2_ATTRIBUTES', 'WDF5', 'WDF5_ATTRIBUTES', 'WESD',
+                  'WESD_ATTRIBUTES', 'WESF', 'WESF_ATTRIBUTES', 'WSF2', 'WSF2_ATTRIBUTES', 'WSF5',
+                  'WSF5_ATTRIBUTES', 'WT01', 'WT01_ATTRIBUTES', 'WT02', 'WT02_ATTRIBUTES', 'WT03',
+                  'WT03_ATTRIBUTES', 'WT04', 'WT04_ATTRIBUTES', 'WT05', 'WT05_ATTRIBUTES', 'WT06',
+                  'WT06_ATTRIBUTES', 'WT08', 'WT08_ATTRIBUTES', 'WT09', 'WT09_ATTRIBUTES', 'WT13',
+                  'WT13_ATTRIBUTES', 'WT14', 'WT14_ATTRIBUTES', 'WT15', 'WT15_ATTRIBUTES','WT16',
+                  'WT16_ATTRIBUTES', 'WT18', 'WT18_ATTRIBUTES', 'WT22', 'WT22_ATTRIBUTES'], axis=1) 
+
+
+
+         
        
 ### renaming the common coloumn names before merging the data files   
-        df1=df1.rename(columns={'Service End Date': 'DATE'})
-        
-### Drop unnecessary columns and rename any columns that need to be changed
-                bro.drop(columns=['ELEVATION', 'PRCP_ATTRIBUTES', 'SNOW_ATTRIBUTES','SNWD', 'SNWD_ATTRIBUTES', 'TOBS' , 'TOBS_ATTRIBUTES', 'WT01', 'WT01_ATTRIBUTES', 'WT04', 'WT04_ATTRIBUTES', 'WT06',  'WT06_ATTRIBUTES'], inplace=True)
+             df1=df1.rename(columns={'Service End Date': 'DATE'})
 
-                bro
-  
-  ### plotting average current_charges consumption_therms of bronx borough through each day in a month 
+             Manhattan = Manhattan.rename(columns={'Development Name': 'Development_Name', 'Borough': 'Borough', 'Account Name': 'Account_Name',
+             'Location': 'Location', 'Funding Source': 'Funding_Source', 'AMP #': 'AMP_Number', 'Vendor Name': 'Vendor_Name', 'UMIS BILL ID': 'UMIS_BILL_ID',
+             'Revenue Month': 'Revenue_Month' , 'Service Start Date': 'Service_Start_Date', 'DATE': 'DATE', '# days':'Number_of_days', 'Meter Number': 'Meter_Number', 'Estimated': 'Estimated', 
+             'Current Charges': 'Current_Charges', 'Rate Class': 'Rate_Class', 'Bill Analyzed': 'Bill_Analyzed', 'Consumption (Therms)': 'Consumption_Therms', 'ES Commodity': 'ES_Commodity',
+             'Underlying Utility': 'Underlying_Utility', 'STATION': 'STATION', 'NAME': 'NAME', 'LATITUDE': 'LATITUDE', 'LONGITUDE': 'LONGITUDE', 'ELEVATION': 'ELEVATION', 'PRCP': 'PRCP', 'PRCP_ATTRIBUTES':'PRCP_ATTRIBUTES','SNOW': 'SNOW',
+             'TMAX': 'TMAX', 'TMAX_ATTRIBUTES': 'TMAX_ATTRIBUTES', 'TMIN': 'TMIN', 'TMIN_ATTRIBUTES': 'TMIN_ATTRIBUTES'
+             })
+
+             Queens = Queens.rename(columns={'Development Name': 'Development_Name', 'Borough': 'Borough', 'Account Name': 'Account_Name',
+             'Location': 'Location', 'Funding Source': 'Funding_Source', 'AMP #': 'AMP_Number', 'Vendor Name': 'Vendor_Name', 'UMIS BILL ID': 'UMIS_BILL_ID',
+             'Revenue Month': 'Revenue_Month' , 'Service Start Date': 'Service_Start_Date', 'DATE': 'DATE', '# days':'Number_of_days', 'Meter Number': 'Meter_Number', 'Estimated': 'Estimated', 
+             'Current Charges': 'Current_Charges', 'Rate Class': 'Rate_Class', 'Bill Analyzed': 'Bill_Analyzed', 'Consumption (Therms)': 'Consumption_Therms', 'ES Commodity': 'ES_Commodity',
+             'Underlying Utility': 'Underlying_Utility', 'STATION': 'STATION', 'NAME': 'NAME', 'LATITUDE': 'LATITUDE', 'LONGITUDE': 'LONGITUDE', 'ELEVATION': 'ELEVATION', 'PRCP': 'PRCP', 'PRCP_ATTRIBUTES':'PRCP_ATTRIBUTES','SNOW': 'SNOW',
+             'TMAX': 'TMAX', 'TMAX_ATTRIBUTES': 'TMAX_ATTRIBUTES', 'TMIN': 'TMIN', 'TMIN_ATTRIBUTES': 'TMIN_ATTRIBUTES'
+             })
+      
+### Drop unnecessary columns and rename any columns that need to be changed
+              bro.drop(columns=['ELEVATION', 'PRCP_ATTRIBUTES', 'SNOW_ATTRIBUTES','SNWD', 'SNWD_ATTRIBUTES', 'TOBS' , 'TOBS_ATTRIBUTES', 'WT01', 'WT01_ATTRIBUTES', 'WT04', 'WT04_ATTRIBUTES', 'WT06',  'WT06_ATTRIBUTES'], inplace=True)
+
+              bro
+                
+<img width="1248" alt="Bro" src="https://user-images.githubusercontent.com/123268832/235383985-1f2e4420-d7a0-4de8-b545-ca7a8c3ce5be.png">
+
+### Changing DATE to datetime
+    bro['DATE']=pd.to_datetime(bro['DATE'])
+    bro['DATE']
+ ## segregating borough data into a seperate data frames
+    df_Bronx=df1[df1['Borough']=='BRONX']
+    df_Bronx
+<img width="1271" alt="Screenshot 2023-04-30 at 9 20 16 PM" src="https://user-images.githubusercontent.com/123268832/235387516-c3ec89fb-5796-4217-bff5-74292159a07b.png">
+
+     df_Brooklyn=df1[df1['Borough']=='BROOKLYN']
+     df_Brooklyn
+ <img width="1260" alt="Screenshot 2023-04-30 at 9 23 21 PM" src="https://user-images.githubusercontent.com/123268832/235387659-e39954e6-77e1-428b-8d0e-2e9abb557b8e.png">
+      
+      df_Manhattan=df1[df1['Borough']=='MANHATTAN']
+      df_Manhattan
+  <img width="1262" alt="Screenshot 2023-04-30 at 9 24 29 PM" src="https://user-images.githubusercontent.com/123268832/235387742-9f8bb25c-88ae-4b3e-b914-48840f20996c.png">
+      
+      df_Queens=df1[df1['Borough']=='QUEENS']
+      df_Queens
+  <img width="1262" alt="Screenshot 2023-04-30 at 9 26 41 PM" src="https://user-images.githubusercontent.com/123268832/235387947-b92b1c8b-d2e6-489b-87c8-846494aeed73.png">
+   
+   
+ ## Saving data into csv file from the data dframe
+    bronx.to_csv('bronx_merged.csv', index=False)
+    Brooklyn.to_csv('brooklyn_merged.csv', index=False)
+    Manhattan.to_csv('manhattan_merged.csv', index=False)
+    Queens = pd.merge(df_Queens,new_que,on='DATE',how='inner')
+    
+ ## Inserting the merged data of bronx into the database(ETL) 
+        import csv
+        import pymysql
+        import time
+        import datetime
+        with open('bronx_merged.csv',"r",encoding='Latin-1') as f:
+            data = [{k: str(v) for k, v in row.items()}
+                for row in csv.DictReader(f,skipinitialspace=True)]
+        #print(data[0].keys())
+        #print(len(data[0]))
+
+        conn = pymysql.connect(host='mysql.clarksonmsda.org', port=3306, user='ia626',
+                                passwd='ia626clarkson', db='ia626', autocommit=True)
+        cur = conn.cursor(pymysql.cursors.DictCursor)
+
+        #Dropping the table if it exist
+        sql = '''DROP TABLE IF EXISTS `Heating_gas_bronx`;'''
+        cur.execute(sql)
+
+       #Creating the table and normalizing the column names with appropriate field types
+       sql = '''CREATE TABLE IF NOT EXISTS `Heating_gas_bronx` (
+         `id` int(7) NOT NULL AUTO_INCREMENT,
+         `Development_Name` varchar(50) NOT NULL,
+         `Borough` varchar(50) NOT NULL,
+         `Account_Name` varchar(50) NOT NULL,
+         `Location` varchar(50) NOT NULL,
+         `Funding_Source` varchar(50) NOT NULL,
+         `AMP_Number` varchar(50) NOT NULL,
+         `Vendor_Name` varchar(50) NOT NULL,
+         `UMIS_BILL_ID` varchar(50) NOT NULL,
+         `Revenue_Month` datetime NOT NULL,
+         `Service_Start_Date` datetime NOT NULL,
+         `Date` datetime NOT NULL,
+         `Number_of_days` int(10) NOT NULL,
+         `Meter_Number` varchar(50) NOT NULL,
+         `Estimated` varchar(10) NOT NULL,
+         `Current_Charges` decimal(18,12) NOT NULL,
+         `Rate_Class` varchar(50) NOT NULL,
+         `Bill_Analyzed` varchar(50) NOT NULL,
+         `Consumption_Therms` decimal(18,12) NOT NULL,
+         `ES_Commodity` varchar(50) NOT NULL,
+         `Underlying_Utility` varchar(50) NOT NULL,
+         `STATION` varchar(50) NOT NULL,
+         `NAME` varchar(50) NOT NULL,
+         `LATITUDE` decimal(18,12) NOT NULL,
+         `LONGITUDE` decimal(18,12) NOT NULL,
+         `PRCP` decimal(18,12) NOT NULL,
+         `SNOW` decimal(18,12) NOT NULL,
+         `TMAX` decimal(18,12) NOT NULL,
+         `TMAX_ATTRIBUTES` varchar(50) NOT NULL,
+         `TMIN` decimal(18,12) NOT NULL,
+         `TMIN_ATTRIBUTES` varchar(50) NOT NULL,
+         PRIMARY KEY (`id`)
+       ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;'''
+       cur.execute(sql)
+
+       sql = '''INSERT INTO `Heating_gas_bronx` (`Development_Name`, `Borough`, `Account_Name`,
+        `Location`, `Funding_Source`, `AMP_Number`, `Vendor_Name`, `UMIS_BILL_ID`,
+        `Revenue_Month`, `Service_Start_Date`, `DATE`, `Number_of_days`, `Meter_Number`, `Estimated`, 
+        `Current_Charges`, `Rate_Class`, `Bill_Analyzed`, `Consumption_Therms`, `ES_Commodity`,
+        `Underlying_Utility`, `STATION`, `NAME`, `LATITUDE`, `LONGITUDE`, `PRCP`, `SNOW`,
+        `TMAX`, `TMAX_ATTRIBUTES`, `TMIN`, `TMIN_ATTRIBUTES`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'''
+
+       n=0
+       bs = 500
+       tokens=[]
+       for row in data:
+         tokens.append([row['Development_Name'],row['Borough'],row['Account_Name'],row['Location'],
+                   row['Funding_Source'],row['AMP_Number'],row['Vendor_Name'],row['UMIS_BILL_ID'],
+                   row['Revenue_Month'],row['Service_Start_Date'],row['DATE'],row['Number_of_days'],
+                   row['Meter_Number'],row['Estimated'],row['Current_Charges'],row['Rate_Class'],
+                   row['Bill_Analyzed'],row['Consumption_Therms'],row['ES_Commodity'], row['Underlying_Utility'],
+                   row['STATION'],row['NAME'],row['LATITUDE'],row['LONGITUDE'],row['PRCP'],row['SNOW'],row['TMAX'],
+                   row['TMAX_ATTRIBUTES'],row['TMIN'],row['TMIN_ATTRIBUTES']])
+           #print(tokens)
+         if len(tokens) >= bs:
+             cur.executemany(sql,tokens)
+             conn.commit()
+             tokens = []
+         n+=1
+       if len(tokens) > 0:
+           cur.executemany(sql,tokens)  #Uploading all rows into the sql
+           conn.commit()
+
+  Inserting merged data of brooklyn, Manhattan and Queen Similar to Bronx borough
+ 
+
+
+  ## Data Visualization 
+   
+   ## 1) Bronx
+   
+  ### Plotting average current_charges consumption_therms of bronx borough through each day in a month 
  
  <img width="800" alt="Bronx_1" src="https://user-images.githubusercontent.com/126725860/235343044-2a336853-949b-411a-8a37-d7c2af73a265.png">
+ 
+ From above visualization avg data of bronx we undestand that in the month of march the current charges are high because the consumption in therms 
+ 
+ ### Average of consumption_Therms by Vendor_name and Month 
+ <img width="686" alt="Bronx_vendor" src="https://user-images.githubusercontent.com/123268832/235382161-49febbf8-be1e-4db2-bb61-21fedbce2eea.png">
+ 
+  ## 2) Brooklyn
+  
+  ###  Average of current Charges by Development_Name in Brooklyn
+  
+  <img width="701" alt="Bronx_develop" src="https://user-images.githubusercontent.com/123268832/235382394-d279163b-68f1-4a30-94d1-cefe24856b4b.png">
+  
+  ###  Average of PCRP by Month in Brooklyn
+  
+  <img width="730" alt="Bronxpcrp_2" src="https://user-images.githubusercontent.com/123268832/235382526-bd5efdb3-6455-4fb2-b297-64ea49d17892.png">
+  
+  ## 3) Manhattan
+  
+  ###  Average of Temperature MIN and Average of Temperature MAX by Month in Manhattan 
+   <img width="682" alt="Manhattan_Tmin" src="https://user-images.githubusercontent.com/123268832/235382779-9a0fe64b-d90d-428b-a581-4626c49ca1f1.png">
+   
+  ### Average of Current_Charges by Development_Name and Month in Manhattan
+  <img width="678" alt="manhattan_develop" src="https://user-images.githubusercontent.com/123268832/235382902-45397277-67d6-451f-94b9-4a5a0b67f2ec.png">
+  
+  ## 4) Queens 
+  
+  ### Average of PCRP and Average of SNOW by Month in Queens
+  <img width="682" alt="Queens_snow" src="https://user-images.githubusercontent.com/123268832/235383024-6c795eb2-e723-44ca-b9dd-965938171d48.png"> 
+  
+  ### Average of Current_Charges and Average of Consumption_Therms by Month in Queens
+  <img width="683" alt="Queens_charge" src="https://user-images.githubusercontent.com/123268832/235383163-010d0b9f-9622-4c58-bca3-8c15eecdedf1.png">
+  
+  # Conclusion
+
+
+  
+
+ 
+ 
+
 
 
     
