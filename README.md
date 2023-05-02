@@ -1,5 +1,6 @@
-# IA626_FinalProject_Energyanalysis
-
+# IA626_FinalProject_Energyanalysis   
+Contributers: INDU SRI DHARAVATH - dharavi@clarkson.edu
+              SANDEEP KUMAR LINGAMPALLY - lingamsk@clarkson.edu
 ## ENERGY AND TEMPERATURE ANALYSIS IN NYC
 
 ### INTRODUCTION 
