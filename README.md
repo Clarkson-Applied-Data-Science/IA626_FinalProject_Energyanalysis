@@ -23,8 +23,9 @@ Analysis based on main data Attributes like:
 9. Funding Source
 
 ### Initally loading the CSV main data file into memory and printing all the attributes in the data
- 
+ ``` python
     
+      
         import csv
         # importing csv Heating_Gas_Consumption.csv 
         fn ='Heating_Gas_Consumption.csv'
@@ -33,7 +34,7 @@ Analysis based on main data Attributes like:
         n=0
         for row in reader:
             print(row)
-            
+ ```       
  ['Development Name', 'Borough', 'Account Name', 'Location', 'Meter AMR', 'Meter Scope', 'TDS #', 'EDP', 'RC Code', 'Funding Source', 'AMP #', 'Vendor Name', 'UMIS BILL ID', 'Revenue Month', 'Service Start Date', 'Service End Date', '# days', 'Meter Number', 'Estimated', 'Current Charges', 'Rate Class', 'Bill Analyzed', 'Consumption (Therms)', 'ES Commodity', 'Underlying Utility']
 ['OCEAN BAY APARTMENTS (OCEANSIDE)', 'QUEENS', 'OCEAN BAY APARTMENTS (OCEANSIDE)', 'BLD 1', '', 'BACKUP GENERATOR', '51', '573', 'Q005100', 'FEDERAL', 'NY005010980P', 'National Grid LI', '12206094', '2023-01', '12/30/2022', '01/31/2023', '32', '4973285', 'N', '58.42', '250 Gas Non Resid General Use', 'Yes', '9', 'UTILITY GAS', 'NatGrid LI']
 ['MELROSE', 'BRONX', 'MELROSE', 'BLD 06', 'NONE', 'BLD 1-8', '28', '523', 'B002800', 'FEDERAL', 'NY005010280P', 'CONSOLIDATED EDISON COMPANY OF NY', '12204326', '2023-01', '12/23/2022', '01/25/2023', '33', '3890439', 'N', '121355.55', 'TRMDHDF', 'Yes', '106950', 'UTILITY GAS', 'ConEd']
@@ -42,7 +43,7 @@ Analysis based on main data Attributes like:
 ['FHA REPOSSESSED HOUSES (GROUP IX)', 'FHA', 'FHA REPOSSESSED HOUSES (GROUP IX)', '341 BERRIMAN STREET', 'AMR', '', '283', '376', 'Q028300', 'FEDERAL', 'NY005012090P', 'National Grid NYC', '12218362', '2023-01', '01/13/2023', '01/24/2023', '11', '115063', 'N', '503.59', 'T1B TRAN RES HEAT', 'Yes', '587', 'UTILITY GAS', 'NatGrid NYC']
             
 ### Total number of rows in the main data set
- 
+``` python 
                 import csv
                 fn ='Heating_Gas_Consumption.csv'
                 f = open(fn,'r')
@@ -53,10 +54,11 @@ Analysis based on main data Attributes like:
                         print("Row:",n)
                     n+=1
                 print("Total number of rows:",n)
-        
+ ```       
   Total number of rows: 230214
   
 ### Cleaning data and creating subset with main attributes and removing Null values 
+``` python 
                          
                         #New subset csv file with cleaned data
                         import csv
@@ -90,8 +92,9 @@ Analysis based on main data Attributes like:
                                 i += 1
                                # if i > 10:
                                 #    break'''
- 
+``` 
 ### Once the data is cleaned and subset of cleaned data created loading the data into dataframes using pandas 
+``` python 
             
         import pandas as pd
 
@@ -100,16 +103,21 @@ Analysis based on main data Attributes like:
 
         # Import dataset2
         bro = pd.read_csv('Bronx_new.csv')
-        
+```        
   <img width="1152" alt="Initial load data" src="https://user-images.githubusercontent.com/123268832/235383729-2d7def19-f685-46ba-a4fb-045eeff59147.png">
 
         
 ### Drop unnecessary columns and rename any columns that need to be changed
+``` python 
+
         df1.drop(columns=['Meter AMR', 'Meter Scope', 'TDS #','EDP', 'RC Code'], inplace=True)
+ ```
 <img width="1244" alt="Dropped Columns" src="https://user-images.githubusercontent.com/123268832/235383870-9e35355f-64f9-4b13-b57a-65a850f93929.png">
 
 
 ### Changing data type to datetime(ns) for revenue month 
+``` python 
+
         df1['Revenue Month']=pd.to_datetime(df1['Revenue Month'])
 
         df1['Service Start Date']=pd.to_datetime(df1['Service Start Date'])
@@ -117,13 +125,18 @@ Analysis based on main data Attributes like:
         df1['Service End Date']=pd.to_datetime(df1['Service End Date'])
          
         bro['DATE']=pd.to_datetime(bro['DATE'])
+ ```       
 ### Loading brooklyn data into df3 and cleaning the data as there are double quotes all over the dataset
+``` python 
+
         DF3 = pd.read_csv('Brooklyn.csv',low_memory=False)
         DF3 = DF3.replace('"', '', regex=True)
         DF3.columns = DF3.columns.str.strip()
         DF3
-        
+ ```       
 ### Renaming and cleaning few columns to match the key values in all the data sets
+``` python 
+
          Brooklyn = Brooklyn.rename(columns={'Development Name': 'Development_Name', 'Borough': 'Borough', 'Account Name': 'Account_Name',
         'Location': 'Location', 'Funding Source': 'Funding_Source', 'AMP #': 'AMP_Number', 'Vendor Name': 'Vendor_Name', 'UMIS BILL ID': 'UMIS_BILL_ID',
         'Revenue Month': 'Revenue_Month' , 'Service Start Date': 'Service_Start_Date', 'DATE': 'DATE', '# days':'Number_of_days', 'Meter Number': 'Meter_Number', 'Estimated': 'Estimated', 
@@ -133,11 +146,14 @@ Analysis based on main data Attributes like:
        })
 
        Brooklyn
+ ```
    <img width="1286" alt="Screenshot 2023-04-30 at 9 54 35 PM" src="https://user-images.githubusercontent.com/123268832/235389821-ff702786-a085-42c3-8d6c-18a254019ec3.png">
 
     
 
  ### Dropping unwanted coloumns to avoid extra data coloumns while merging the data 
+``` python 
+ 
         DF4 = DF3.drop(['AWND', 'AWND_ATTRIBUTES', 'DAPR', 'DAPR_ATTRIBUTES', 'MDPR', 'MDPR_ATTRIBUTES',
                           'PGTM', 'PGTM_ATTRIBUTES', 'PSUN', 'PSUN_ATTRIBUTES', 'SNOW_ATTRIBUTES', 'SNWD',
                           'SNWD_ATTRIBUTES', 'TAVG', 'TAVG_ATTRIBUTES', 'TOBS', 'TOBS_ATTRIBUTES', 'TSUN',
@@ -160,11 +176,13 @@ Analysis based on main data Attributes like:
                   'WT13_ATTRIBUTES', 'WT14', 'WT14_ATTRIBUTES', 'WT15', 'WT15_ATTRIBUTES','WT16',
                   'WT16_ATTRIBUTES', 'WT18', 'WT18_ATTRIBUTES', 'WT22', 'WT22_ATTRIBUTES'], axis=1) 
 
-
+```
 
          
        
-### renaming the common coloumn names before merging the data files   
+### renaming the common coloumn names before merging the data files
+``` python 
+
              df1=df1.rename(columns={'Service End Date': 'DATE'})
 
              Manhattan = Manhattan.rename(columns={'Development Name': 'Development_Name', 'Borough': 'Borough', 'Account Name': 'Account_Name',
@@ -182,42 +200,64 @@ Analysis based on main data Attributes like:
              'Underlying Utility': 'Underlying_Utility', 'STATION': 'STATION', 'NAME': 'NAME', 'LATITUDE': 'LATITUDE', 'LONGITUDE': 'LONGITUDE', 'ELEVATION': 'ELEVATION', 'PRCP': 'PRCP', 'PRCP_ATTRIBUTES':'PRCP_ATTRIBUTES','SNOW': 'SNOW',
              'TMAX': 'TMAX', 'TMAX_ATTRIBUTES': 'TMAX_ATTRIBUTES', 'TMIN': 'TMIN', 'TMIN_ATTRIBUTES': 'TMIN_ATTRIBUTES'
              })
-      
+```             
 ### Drop unnecessary columns and rename any columns that need to be changed
+``` python 
+
               bro.drop(columns=['ELEVATION', 'PRCP_ATTRIBUTES', 'SNOW_ATTRIBUTES','SNWD', 'SNWD_ATTRIBUTES', 'TOBS' , 'TOBS_ATTRIBUTES', 'WT01', 'WT01_ATTRIBUTES', 'WT04', 'WT04_ATTRIBUTES', 'WT06',  'WT06_ATTRIBUTES'], inplace=True)
 
               bro
-                
+ ```               
 <img width="1248" alt="Bro" src="https://user-images.githubusercontent.com/123268832/235383985-1f2e4420-d7a0-4de8-b545-ca7a8c3ce5be.png">
 
 ### Changing DATE to datetime
+``` python 
+
     bro['DATE']=pd.to_datetime(bro['DATE'])
     bro['DATE']
+```    
  ## segregating borough data into a seperate data frames
+``` python 
+ 
     df_Bronx=df1[df1['Borough']=='BRONX']
     df_Bronx
+ ```   
 <img width="1271" alt="Screenshot 2023-04-30 at 9 20 16 PM" src="https://user-images.githubusercontent.com/123268832/235387516-c3ec89fb-5796-4217-bff5-74292159a07b.png">
+
+``` python 
 
      df_Brooklyn=df1[df1['Borough']=='BROOKLYN']
      df_Brooklyn
+  ```   
+     
  <img width="1260" alt="Screenshot 2023-04-30 at 9 23 21 PM" src="https://user-images.githubusercontent.com/123268832/235387659-e39954e6-77e1-428b-8d0e-2e9abb557b8e.png">
-      
+ 
+``` python 
+    
       df_Manhattan=df1[df1['Borough']=='MANHATTAN']
       df_Manhattan
+  ```     
   <img width="1262" alt="Screenshot 2023-04-30 at 9 24 29 PM" src="https://user-images.githubusercontent.com/123268832/235387742-9f8bb25c-88ae-4b3e-b914-48840f20996c.png">
+  
+``` python 
       
       df_Queens=df1[df1['Borough']=='QUEENS']
       df_Queens
+  ```     
   <img width="1262" alt="Screenshot 2023-04-30 at 9 26 41 PM" src="https://user-images.githubusercontent.com/123268832/235387947-b92b1c8b-d2e6-489b-87c8-846494aeed73.png">
    
    
  ## Saving data into csv file from the data dframe
+``` python 
+ 
     bronx.to_csv('bronx_merged.csv', index=False)
     Brooklyn.to_csv('brooklyn_merged.csv', index=False)
     Manhattan.to_csv('manhattan_merged.csv', index=False)
     Queens = pd.merge(df_Queens,new_que,on='DATE',how='inner')
-    
+```    
  ## Inserting the merged data of bronx into the database(ETL) 
+``` python 
+ 
         import csv
         import pymysql
         import time
@@ -300,7 +340,7 @@ Analysis based on main data Attributes like:
        if len(tokens) > 0:
            cur.executemany(sql,tokens)  #Uploading all rows into the sql
            conn.commit()
-
+```
   Inserting merged data of brooklyn, Manhattan and Queen Similar to Bronx borough
  
 
@@ -324,7 +364,7 @@ Analysis based on main data Attributes like:
   
   <img width="701" alt="Bronx_develop" src="https://user-images.githubusercontent.com/123268832/235382394-d279163b-68f1-4a30-94d1-cefe24856b4b.png">
   
-  ###  Average of PCRP by Month in Brooklyn
+  ###  Average of PRCP by Month in Brooklyn
   
   <img width="730" alt="Bronxpcrp_2" src="https://user-images.githubusercontent.com/123268832/235382526-bd5efdb3-6455-4fb2-b297-64ea49d17892.png">
   
@@ -338,17 +378,19 @@ Analysis based on main data Attributes like:
   
   ## 4) Queens 
   
-  ### Average of PCRP and Average of SNOW by Month in Queens
+  ### Average of PRCP and Average of SNOW by Month in Queens
   <img width="682" alt="Queens_snow" src="https://user-images.githubusercontent.com/123268832/235383024-6c795eb2-e723-44ca-b9dd-965938171d48.png"> 
   
   ### Average of Current_Charges and Average of Consumption_Therms by Month in Queens
   <img width="683" alt="Queens_charge" src="https://user-images.githubusercontent.com/123268832/235383163-010d0b9f-9622-4c58-bca3-8c15eecdedf1.png">
   
-  # Conclusion
+  ### Conclusion
 
+By analyzing this dataset, one can gain insights into the energy usage patterns in different boroughs of New York City, how they vary over time, and how they are affected by factors such as temperature, snowfall and Precipitation. This information can be valuable for making decisions related to energy management and policy.
 
+Overall, the dataset appears to be comprehensive and includes a diverse set of attributes that can be useful for conducting detailed analyses. However, the specific conclusions that can be drawn from the data will depend on the specific research questions and methods used in the analysis.
   
-
+Through regerous cleaning and merging of the above datasets, we get a confined data specific to the months form `MARCH` to `AUGUST` and from that one can clearly understand that the `LATE WINTERS` mark the highest useage of the Heating Gas specifically the month of `MARCH` marks the highest. In addition to that we can also see, the `CURRENT CHARGES` are also high on those months and so with this we can conclude that the `CURRENT CHARGES` is directly propotional to the `CONSUMPTION THERMS` useage.
  
  
 
