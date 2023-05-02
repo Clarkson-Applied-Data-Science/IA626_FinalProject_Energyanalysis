@@ -254,7 +254,7 @@ Analysis based on main data Attributes like:
     bronx.to_csv('bronx_merged.csv', index=False)
     Brooklyn.to_csv('brooklyn_merged.csv', index=False)
     Manhattan.to_csv('manhattan_merged.csv', index=False)
-    Queens = pd.merge(df_Queens,new_que,on='DATE',how='inner')
+    que = pd.read_csv('Queens.csv',low_memory=False)
 ```    
  ## Inserting the merged data of bronx into the database(ETL) 
 ``` python 
